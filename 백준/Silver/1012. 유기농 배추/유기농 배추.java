@@ -7,6 +7,8 @@ public class Main {
 	// 인접노드 리스트, 방문 확인 리스트 미리 만들기 (static)
 //	static ArrayList<Integer[][]>[][] near;
 	static boolean[][] visited;
+	static int[][] land;
+	static int M, N;
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,11 +19,12 @@ public class Main {
 		for (int t = 1; t <= T; t++) {
 
 			st = new StringTokenizer(br.readLine());
-			int M = Integer.parseInt(st.nextToken()); // 가로길이
-			int N = Integer.parseInt(st.nextToken()); // 세로길이
-			int K = Integer.parseInt(st.nextToken()); // 노드 개수
+			M = Integer.parseInt(st.nextToken()); // 가로길이
+			N = Integer.parseInt(st.nextToken()); // 세로길이
+			int K = Integer.parseInt(st.nextToken()); // 배추(노드) 개수
+			
 			// 2차원 땅 생성 및 입력
-			int[][] land = new int[M][N];
+			land = new int[M][N];
 			int r, c;
 			for (int i = 0; i < K; i++) {
 				st = new StringTokenizer(br.readLine());
@@ -47,6 +50,9 @@ public class Main {
 //		}
 
 			int count = 0; // 배추심은 구역 카운트할 변수
+			// 0,0부터 탐색
+			// 배추가 심어져 있으면서,
+			// 아직 방문하지 않았다면 => DFS 시작
 			for (int i = 0; i < M; i++) {
 				for (int j = 0; j < N; j++) {
 					if (land[i][j] == 1 && !visited[i][j]) {
@@ -68,8 +74,10 @@ public class Main {
 	static int nr, nc;
 	
 	static void DFS(int[][] land, int r, int c) {
+		// base case
 		if (visited[r][c])
 			return;
+		
 		// 해당 위치 방문 처리
 		visited[r][c] = true;
 		
