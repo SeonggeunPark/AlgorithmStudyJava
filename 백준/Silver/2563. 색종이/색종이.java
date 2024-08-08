@@ -9,34 +9,27 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine());
 		StringTokenizer st;
-		
-		int[][] area = new int[100][100];
-//		int[][] papers = new int[N][2];
+
+		int count = 0;
+		boolean[][] area = new boolean[100][100];
 		int x, y;
-		for (int i=0; i<N; i++) {
+		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
-//			papers[i][0] = Integer.parseInt(st.nextToken());
-//			papers[i][1] = Integer.parseInt(st.nextToken());
 			y = Integer.parseInt(st.nextToken());
 			x = Integer.parseInt(st.nextToken());
-			
-			for (int r=y; r<y+10; r++) {
-				for (int c=x; c<x+10; c++) {
-//					if (area[r][c] == 0)
-					area[r][c] = 1;
+
+			for (int r = y; r < y + 10; r++) {
+				for (int c = x; c < x + 10; c++) {
+					if (area[r][c] == false) {
+						area[r][c] = true;
+						count++;
+					}
 				}
 			}
 		}
-		int sum = 0;
-		for (int r=0; r<area.length; r++) {
-			for (int c=0; c<area[r].length; c++) {
-				if (area[r][c] == 1)
-				sum++;
-			}
-		}
-		
-		System.out.println(sum);
-		
+
+		System.out.println(count);
+
 	}
 
 }
