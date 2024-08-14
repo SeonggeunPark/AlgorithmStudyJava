@@ -3,12 +3,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Solution{
-
+public class Solution {
+	// 문자열을 담을 StringBuilder 선언
+    // 다른 메서드에서도 사용하기 위해 static으로 선언
+	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		StringBuilder sb = new StringBuilder();
 
 		for (int t = 1; t <= 10; t++) {
 			int N = Integer.parseInt(br.readLine());
@@ -25,9 +26,11 @@ public class Solution{
 					st.nextToken();
 				}
 			}
-			System.out.print("#" + t + " ");
+			sb.append("#"+t+" ");
 			inOrder(tree, 1);
-			System.out.println();
+			System.out.println(sb.toString());
+			sb.delete(0, sb.length());
+			
 		}
 
 	}
@@ -40,7 +43,7 @@ public class Solution{
 		// 왼쪽 자식노드 우선 탐색
 		inOrder(tree, root*2);
 		// 자기 자신 탐색
-		System.out.print(tree[root]);
+		sb.append(tree[root]);
 		// 오른쪽 자식노드 탐색
 		inOrder(tree, root*2+1);
 	}
