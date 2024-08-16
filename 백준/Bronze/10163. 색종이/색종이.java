@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  *  작업이 완료되면 다시 for문을 이용해 번호 개수를 카운트하는 배열을 만들어
  *  번호별 개수를 저장하고 출력한다. 
  */
-public class Main {
+public class Main{
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,11 +19,11 @@ public class Main {
 		int N = Integer.parseInt(br.readLine());
 		
 		int[][] map = new int[1000][1000];
-		// [종이번호][0: x좌표, 1: y좌표, 2: width, 3: height, 4: 종이면적]
-		int[][] papers = new int[N][5];
+		// [종이번호(1번부터)][0: x좌표, 1: y좌표, 2: width, 3: height, 4: 종이면적]
+		int[][] papers = new int[N+1][5];
 		int x, y, width, height;
 		
-		for (int pNum = 0; pNum < N; pNum++) {
+		for (int pNum = 1; pNum <= N; pNum++) {
 			st = new StringTokenizer(br.readLine());
 			papers[pNum][0] = Integer.parseInt(st.nextToken());
 			papers[pNum][1] = Integer.parseInt(st.nextToken());
@@ -39,9 +39,15 @@ public class Main {
 					map[i][j] = pNum;
 				}
 			}
+//			for (int i = 0; i < 10; i++) {
+//				for (int j = 0; j < 10; j++) {
+//					System.out.print(map[i][j]);
+//				}
+//				System.out.println();
+//			}
 		}
 		// 저장해뒀던 종이들의 x,y 좌표들만 탐색하여 종이 면적을 구함.
-		for (int pNum = 0; pNum<N; pNum++) {
+		for (int pNum = 1; pNum<=N; pNum++) {
 			for (int i=papers[pNum][0]; i<papers[pNum][0]+papers[pNum][2]; i++) {
 				for (int j=papers[pNum][1]; j<papers[pNum][1]+papers[pNum][3]; j++) {
 					// 해당 위치 종이번호가 찾으려는 종이 번호와 같으면 카운트
@@ -52,7 +58,7 @@ public class Main {
 			}
 		}
 		// 종이 면적 출력
-		for (int pNum = 0; pNum<N; pNum++) {
+		for (int pNum = 1; pNum<=N; pNum++) {
 			System.out.println(papers[pNum][4]);
 		}
 		
