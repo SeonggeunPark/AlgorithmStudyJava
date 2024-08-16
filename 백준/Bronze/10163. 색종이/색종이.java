@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  *  작업이 완료되면 다시 for문을 이용해 번호 개수를 카운트하는 배열을 만들어
  *  번호별 개수를 저장하고 출력한다. 
  */
-public class Main{
+public class Main {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,7 +18,7 @@ public class Main{
 
 		int N = Integer.parseInt(br.readLine());
 		
-		int[][] map = new int[1000][1000];
+		int[][] map = new int[1001][1001];
 		// [종이번호(1번부터)][0: x좌표, 1: y좌표, 2: width, 3: height, 4: 종이면적]
 		int[][] papers = new int[N+1][5];
 		int x, y, width, height;
@@ -39,12 +39,6 @@ public class Main{
 					map[i][j] = pNum;
 				}
 			}
-//			for (int i = 0; i < 10; i++) {
-//				for (int j = 0; j < 10; j++) {
-//					System.out.print(map[i][j]);
-//				}
-//				System.out.println();
-//			}
 		}
 		// 저장해뒀던 종이들의 x,y 좌표들만 탐색하여 종이 면적을 구함.
 		for (int pNum = 1; pNum<=N; pNum++) {
