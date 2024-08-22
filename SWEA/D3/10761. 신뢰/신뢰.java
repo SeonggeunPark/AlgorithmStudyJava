@@ -3,6 +3,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/*
+ * 로봇이 동시에 버튼을 누를 수는 없으나 미리 이동은 가능함.
+ * 서로 다른 복도에 위치하고 미리 이동하기 위해 각 로봇의 순서별 누적시간을 따로 저장
+ * 순서대로 스위치를 눌러야 하기 때문에, i번째 순서에서 로봇이 미리 스위치에 도달했더라도,
+ * i-1번째 스위치를 누르기 전까지는 대기해야함. 따라서 i번째까지의 소요시간은 i-1번째 소요시간보다 최소 1초 더 소요됨을 이용
+ * 2차원 배열을 선언해 로봇 색과 누를 스위치 번호를 저장하고, 해당 순서까지의 소요시간을 함께 저장하여 관리하기로 함.
+ * 
+ */
+
 public class Solution {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
