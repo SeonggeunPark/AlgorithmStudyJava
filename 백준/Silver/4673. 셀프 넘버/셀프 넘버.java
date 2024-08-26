@@ -13,7 +13,6 @@ public class Main {
 		System.out.print(sb);
 	}
 	static void d(int k) {
-		if (k>10000) return;
 		int sum = 0;
 		sum += k;
 		
