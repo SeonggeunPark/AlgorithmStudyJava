@@ -4,36 +4,48 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Solution {
+	static int N, M;
+	static int[] snack;
+	static int max;
+
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-		
-		int  T = Integer.parseInt(br.readLine());
-		
-		for (int t=1; t<=T; t++) {
+
+		int T = Integer.parseInt(br.readLine());
+
+		for (int t = 1; t <= T; t++) {
 			st = new StringTokenizer(br.readLine());
-			
-			int N = Integer.parseInt(st.nextToken());
-			int M = Integer.parseInt(st.nextToken());
-			int[] snack = new int[N];
-			
+
+			N = Integer.parseInt(st.nextToken());
+			M = Integer.parseInt(st.nextToken());
+			snack = new int[N];
+
 			st = new StringTokenizer(br.readLine());
-			for (int i=0; i<N; i++) {
+			for (int i = 0; i < N; i++) {
 				snack[i] = Integer.parseInt(st.nextToken());
 			}
-			
-			int sum;
-			int max = -1;
-			
-			for (int i=0; i<N-1; i++) {
-				for (int j=i+1; j<N; j++) {
-					sum = snack[i]+snack[j];
-					if (sum > M) continue;
-					max = Math.max(max, sum);
-				}
-			}
-			
-			System.out.println("#"+t+" "+max);
+
+			max = -1;
+			bestPick(0, 0, 0);
+
+			System.out.println("#" + t + " " + max);
 		}
+	}
+
+	static void bestPick(int idx, int count, int sum) {
+		if (sum > M)
+			return;
+		if (count >= 2) {
+			max = Math.max(max, sum);
+			return;
+		}
+		if (idx >= N) return;
+		
+		// 현재 과자를 고른다
+		bestPick(idx + 1, count+1, sum + snack[idx]);
+
+		// 안고른다
+		bestPick(idx + 1, count, sum);
 	}
 }
