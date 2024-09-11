@@ -1,78 +1,57 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
+	static boolean[] visited;
 	static int N, M;
-	static int cnt = 0;
-	static int[] visit;
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 
-		N = sc.nextInt();
-		M = sc.nextInt();
-
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		visited = new boolean[Math.max(N, M)*2+1];
 		cnt = 0;
-		visit = new int[Math.max(N, M) * 2];
-		if (N == M) {
-			System.out.println(0);
-			return;
-		}
 		BFS(N);
-
+		
 		System.out.println(cnt);
 	}
-
+	static int cnt;
+	
 	static void BFS(int v) {
-		Queue<int[]> queue = new LinkedList<>();
-		// 배열을 큐에 추가
-		// {노드 번호, 이동 횟수}
-		queue.add(new int[] { v, 1 });
-		// 방문체크 + 이동횟수 입력
-		visit[v] = 1;
-		// 큐에서 꺼내며 작업
-		while (!queue.isEmpty()) {
-			// 큐에서 꺼내기
-			int[] tmp = queue.poll();
-			// 걷기 +1
-			// 방문체크
-			if (tmp[0] + 1 < visit.length) {
-				if (tmp[0] + 1 == M) {
-					cnt = tmp[1];
+		Queue<Integer> q = new LinkedList<>();
+		q.add(v);
+		visited[v] = true;
+		
+		int size = q.size();
+		
+		while (!q.isEmpty()) {
+//			System.out.println(q);
+			for (int i = 0; i < size; i++) {
+				int popItem = q.poll();
+				if (popItem == M)
 					return;
-				}
-				// 아직 방문 안했다면 방문 체크 후 큐에 삽입
-				// 한 번 더 이동한 것이므로 1번 인덱스에 +1 하여 대입
 
-				if (visit[tmp[0] + 1] == 0) {
-					visit[tmp[0] + 1] = tmp[1] + 1;
-					queue.add(new int[] { tmp[0] + 1, tmp[1] + 1 });
+				if (popItem+1 < visited.length && !visited[popItem + 1]) {
+					q.add(popItem + 1);
+					visited[popItem+1] = true;
+				}
+				if (popItem-1 >= 0 && !visited[popItem - 1]) {
+					q.add(popItem - 1);
+					visited[popItem-1] = true;
+				}
+				if (popItem*2 < visited.length && !visited[popItem * 2]) {
+					q.add(popItem * 2);
+					visited[popItem*2] = true;
 				}
 			}
-			// 걷기 -1
-			if (tmp[0] - 1 >= 0) {
-				if (tmp[0] - 1 == M) {
-					cnt = tmp[1];
-					return;
-				}
-				if (visit[tmp[0] - 1] == 0) {
-					visit[tmp[0] - 1] = tmp[1] + 1;
-					queue.add(new int[] { tmp[0] - 1, tmp[1] + 1 });
-				}
-			}
-			// 순간이동 *2
-			if (tmp[0] * 2 < visit.length) {
-				if (tmp[0] * 2 == M) {
-					cnt = tmp[1];
-					return;
-				}
-
-				if (visit[tmp[0] * 2] == 0) {
-					visit[tmp[0] * 2] = tmp[1] + 1;
-					queue.add(new int[] { tmp[0] * 2, tmp[1] + 1 });
-				}
-			}
+			cnt ++;
+			size = q.size();
 		}
 	}
 }
