@@ -1,81 +1,90 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
-class Node {
-    char data;
-    Node left, right;
-
-    Node(char data) {
-        this.data = data;
-        this.left = null;
-        this.right = null;
-    }
-}
-
 public class Main {
-    static Node[] tree;
+	static int N, root;
+	static int[] count;
+	static char[][] tree;
+	static StringBuilder sb;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		N = sc.nextInt();
+		count = new int[N];
+		// tree[노드번호][0:자기번호 1:왼쪽자식번호 2:오른쪽자식번호]
+		tree = new char[N][3];
+		// 트리 입력
+		for (int i = 0; i < N; i++) {
+			tree[i][0] = sc.next().charAt(0);
+			tree[i][1] = sc.next().charAt(0);
+			tree[i][2] = sc.next().charAt(0);
 
-        int N = sc.nextInt(); // 노드 개수
-        tree = new Node[26];  // 노드가 알파벳 대문자이므로 26 크기 배열
+			if (tree[i][1] != '.')
+				count[tree[i][1] - 'A'] += 1;
+			if (tree[i][2] != '.')
+				count[tree[i][2] - 'A'] += 1;
+		}
+		int root = 0;
+		for (int i=0;i <N; i++) {
+			if (tree[i][0]=='A')
+				root = i;
+		}
+		sb = new StringBuilder();
 
-        for (int i = 0; i < N; i++) {
-            char parent = sc.next().charAt(0);
-            char left = sc.next().charAt(0);
-            char right = sc.next().charAt(0);
+		preOrder(root);
+		sb.append('\n');
+		midOrder(root);
+		sb.append('\n');
+		postOrder(root);
 
-            if (tree[parent - 'A'] == null) {
-                tree[parent - 'A'] = new Node(parent);
-            }
+		System.out.println(sb);
+	}
 
-            // 왼쪽 자식이 '.'이 아닐 경우
-            if (left != '.') {
-                tree[parent - 'A'].left = new Node(left);
-                tree[left - 'A'] = tree[parent - 'A'].left;  // 저장
-            }
+	static void preOrder(int root) {
+		sb.append(tree[root][0]);
+		if (tree[root][1] != '.') {
+			for (int i=0;i <N; i++) {
+				if (tree[i][0]==tree[root][1])
+					preOrder(i);
+			}
+		}
+		if (tree[root][2] != '.') {
+			for (int i=0;i <N; i++) {
+				if (tree[i][0]==tree[root][2])
+					preOrder(i);
+			}
+		}
+	}
 
-            // 오른쪽 자식이 '.'이 아닐 경우
-            if (right != '.') {
-                tree[parent - 'A'].right = new Node(right);
-                tree[right - 'A'] = tree[parent - 'A'].right; // 저장
-            }
-        }
+	static void midOrder(int root) {
+		if (tree[root][1] != '.') {
+			for (int i=0;i <N; i++) {
+				if (tree[i][0]==tree[root][1])
+					midOrder(i);
+			}
+		}
+		sb.append(tree[root][0]);
+		if (tree[root][2] != '.') {
+			for (int i=0;i <N; i++) {
+				if (tree[i][0]==tree[root][2])
+					midOrder(i);
+			}
+		}
+	}
 
-        // 전위 순회
-        preorder(tree[0]);
-        System.out.println();
-
-        // 중위 순회
-        inorder(tree[0]);
-        System.out.println();
-
-        // 후위 순회
-        postorder(tree[0]);
-        System.out.println();
-    }
-
-    // 전위 순회 (Preorder: Root -> Left -> Right)
-    public static void preorder(Node node) {
-        if (node == null) return;
-        System.out.print(node.data);
-        preorder(node.left);
-        preorder(node.right);
-    }
-
-    // 중위 순회 (Inorder: Left -> Root -> Right)
-    public static void inorder(Node node) {
-        if (node == null) return;
-        inorder(node.left);
-        System.out.print(node.data);
-        inorder(node.right);
-    }
-
-    // 후위 순회 (Postorder: Left -> Right -> Root)
-    public static void postorder(Node node) {
-        if (node == null) return;
-        postorder(node.left);
-        postorder(node.right);
-        System.out.print(node.data);
-    }
+	static void postOrder(int root) {
+		if (tree[root][1] != '.') {
+			for (int i=0;i <N; i++) {
+				if (tree[i][0]==tree[root][1])
+					postOrder(i);
+			}
+		}
+		if (tree[root][2] != '.') {
+			for (int i=0;i <N; i++) {
+				if (tree[i][0]==tree[root][2])
+					postOrder(i);
+			}
+		}
+		sb.append(tree[root][0]);
+	}
 }
