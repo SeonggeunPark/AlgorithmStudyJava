@@ -2,43 +2,41 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        
-        // 부모 값을 찾는 함수
-        int p = findParent(N); // 분모 값
-        int pNum = p * (p - 1) / 2 + 1; // 부모 값에서 몇 번째 수인지
-        
-        int numerator;
-        int denominator;
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int N = sc.nextInt();
+		// 분자 분모 합이 같은 경우끼리 모으면  
+		// 행렬상 대각선이 됨
+		// 가장 첫번째 열의 값을 부모값이라고 할 때 부모 값이 몇번째 수인지 찾음
+		int p = findParent(N); // 부모 값의 분자 or 분모 값을 저장
+		int pNum = p*(p-1)/2+1; // 부모 값이 몇번째 수인지 저장
+		
+		if (p%2 == 0) {
+			System.out.println((1+N-pNum) +"/"+(p-N+pNum));
+		} else {
+			System.out.println((p-N+pNum) +"/"+(1+N-pNum));
+		}
+	
+	}
 
-        // pNum은 해당 집합의 시작 인덱스이므로 N과의 차이를 계산
-        int position = N - pNum;
+	private static int findParent(int n) {
+		int i=1;
+		while (true) {
+			// 해당 집합에서의 최대값
+			int max = i*(i+1)/2;
+			
+			if (max >= n) {
+				break;
+			}
+			
+			i+=1;
+		}
+		
+		// i값을 찾았다면.. N번째 분수 집합의 부모값은 i / 1 이다.
+		// 부모 값은 i*(i-1)/2 + 1 번째 수
+		return i;
+		
+		
+	}
 
-        // 짝수는 아래 방향, 홀수는 위 방향
-        if (p % 2 == 0) {
-            // 짝수일 때는 (p - position) / (position + 1)
-            numerator = position + 1;
-            denominator = p - position;
-        } else {
-            // 홀수일 때는 (position + 1) / (p - position)
-            numerator = p - position;
-            denominator = position + 1;
-        }
-
-        System.out.println(numerator + "/" + denominator);
-    }
-
-    private static int findParent(int n) {
-        int i = 1;
-        while (true) {
-            int max = i * (i + 1) / 2; // 해당 집합에서의 최대값
-            if (max >= n) {
-                break;
-            }
-            i += 1;
-        }
-        return i; // 부모 값
-    }
 }
