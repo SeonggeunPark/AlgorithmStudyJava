@@ -1,89 +1,47 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Main {
-	static class Node implements Comparable<Node>{
-		int idx;
-		int val;
-		int rank;
-		public Node() {
-			// TODO Auto-generated constructor stub
-		}
-//		public Node(int idx, int val) {
-//			super();
-//			this.idx = idx;
-//			this.val = val;
-//		}
-		
-		public Node(int idx, int val, int rank) {
-			super();
-			this.idx = idx;
-			this.val = val;
-			this.rank = rank;
-		}
-		@Override
-		public String toString() {
-			return "Node [idx=" + idx + ", val=" + val + "]";
-		}
-		@Override
-		public int compareTo(Node o) {
-			return this.val-o.val;
-		}
-		
-	}
-	static int N;
-	static int[] arr;
-	static int[] rank;
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
-		StringTokenizer st = new StringTokenizer(br.readLine());
-	
-		N = Integer.parseInt(st.nextToken());
-		
-//		int[] arr = new int[N];
-		int[] rank = new int[N];
-		Node[] nodes = new Node[N];
-		
-		st = new StringTokenizer(br.readLine());
-		for (int i=0; i<N; i++) {
-			int val = Integer.parseInt(st.nextToken());
-//			arr[i] = val;
-			nodes[i]=new Node(i, val, 0);
-		}
-		
-		Arrays.sort(nodes);
-		
-		for (int i=1; i<N; i++) {
-			if (nodes[i].val == nodes[i-1].val) {
-				rank[i] = rank[i-1];
-				nodes[i].rank = rank[i];
-			} else {
-				rank[i] = rank[i-1]+1;
-				nodes[i].rank = rank[i];
-			}
-		}
-		
-		Arrays.sort(nodes, new Comparator<Node>() {
-		    @Override
-		    public int compare(Node o1, Node o2) {
-		    	// 오름차순
-		        return o1.idx - o2.idx;
-		    }
-		});
-		
-		for (Node node : nodes) {
-			sb.append(node.rank).append(' ');
-		}
-		System.out.println(sb);
-	}
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        
+        int N = Integer.parseInt(st.nextToken());
+        int[] arr = new int[N];
+        int[] result = new int[N];
+        
+        // 값 입력 받기
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        
+        // 값 복사하여 오름차순 정렬
+        int[] sortedArr = arr.clone();
+        Arrays.sort(sortedArr);
+        
+        // 압축된 좌표를 저장할 맵 (값 -> 순위)
+        Map<Integer, Integer> rankMap = new HashMap<>();
+        int rank = 0;
+        
+        // 중복 값 처리: 중복 값에 대해 동일한 순위를 부여
+        for (int value : sortedArr) {
+            if (!rankMap.containsKey(value)) {
+                rankMap.put(value, rank++);
+            }
+        }
+        
+        // 원래 배열에 대해 압축된 순위 출력
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < N; i++) {
+            sb.append(rankMap.get(arr[i])).append(' ');
+        }
+        
+        System.out.println(sb.toString());
+    }
 }
