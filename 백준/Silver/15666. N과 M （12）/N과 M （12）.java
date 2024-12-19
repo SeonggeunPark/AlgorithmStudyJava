@@ -59,7 +59,7 @@ public class Main {
 	        // 중복 여부 확인
 	        for (int i = 0; i < size; i++) {
 	            if (pick[i].equals(sb.toString())) {
-	                sb.delete(0, sb.length());
+	                sb.setLength(0);
 	                return;
 	            }
 	        }
@@ -69,7 +69,7 @@ public class Main {
 
 	        ans.append(sb).append('\n');
 
-	        sb.delete(0, sb.length());
+	        sb.setLength(0);
 	        return;
 	    }
 
