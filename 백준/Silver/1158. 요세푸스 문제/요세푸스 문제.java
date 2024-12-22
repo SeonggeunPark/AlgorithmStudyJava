@@ -25,8 +25,6 @@ public class Main {
 		K = Integer.parseInt(st.nextToken()); // 제거 규칙
 
 		survived = new boolean[N + 1]; // 생존 여부를 기록
-		Arrays.fill(survived, true);  // 시작은 모두 생존으로 처리
-		
 		ans = new int[N]; // 제거된 사람 기록
 		size = 0; // ans배열의 크기 기록
 
@@ -49,26 +47,14 @@ public class Main {
 	}
 
 	private static void eliminate() {
-		// 첫번째 제거 대상 제거 후 반복작업 수행
-		int pointer = K;
-		survived[K] = false;
-		ans[size++] = K;
-
-		// 모두 제거될 때까지 작업 반복
-		while (size < N) {
-			int cnt = K;	// 포인터 이동횟수 카운터
-			
-			while (cnt > 0) {
-				pointer += 1;	
-				if (pointer>N) pointer %= N;	// 모듈러 연산
-				if (survived[pointer]) cnt -= 1;	// 포인터가 생존했을 경우에만 카운트 줄임
-			}
-			
-			survived[pointer] = false;
-			ans[size++] = pointer;
+		int pointer = 0;
+		List<Integer> list = new ArrayList<>();
+		for (int i = 1; i <= N; i++) {
+			list.add(i);
 		}
-		
-		
+		while (size<N) {
+			pointer = (pointer + K - 1) % list.size();
+			ans[size++] = list.remove(pointer);
+		}
 	}
-
 }
