@@ -32,9 +32,9 @@ public class Main {
 					if (!isremoved[i]) {
 						sb.append('+').append('\n');
 					}
-					top += 1;
 				}
 				sb.append('-').append('\n');
+				top = n;
 				isremoved[top] = true;
 				while (isremoved[top]) {
 					top -= 1;
