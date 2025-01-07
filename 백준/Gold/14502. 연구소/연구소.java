@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class Main {
 	static int[][] map;
 	static boolean[][] visited;
-	static int count, N, M;
+	static int count, N, M, zeroCount, addedVirus;
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
 	public static void main(String[] args) throws NumberFormatException, IOException {
@@ -21,36 +21,25 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		
 		count = 0;
+		zeroCount = 0;
+		addedVirus = Integer.MAX_VALUE;
 		visited = new boolean[N][M];
 		map = new int[N][M];
 		for (int r = 0; r < N; r++) {
 			st = new StringTokenizer(br.readLine());
 			for (int c = 0; c < M; c++) {
 				map[r][c] = Integer.parseInt(st.nextToken());
+				if (map[r][c] == 0) {
+					zeroCount += 1;
+				}
 			}
 		}
 
 		// 벽 세우기
 		createWallByDFS(0);
 		
-		System.out.println(count);
+		System.out.println(zeroCount-3-addedVirus);
 	}
-
-	private static void countSafeZone(int[][] multipliedMap) {
-
-		int tmpCount = 0;
-		for (int r=0; r<N; r++) {
-			for (int c=0; c<M; c++) {
-				if (multipliedMap[r][c] == 0) {
-					tmpCount += 1;
-				}
-			}
-		}
-		if (tmpCount > count) {
-			count = tmpCount;
-		}
-	}
-
 	// 재귀메서드로 벽을 세우는 모든 경우의 수 탐색
 	private static void createWallByDFS(int wall) {
 		if (wall >= 3) {
@@ -71,6 +60,7 @@ public class Main {
 	// 바이러스 증식시키기
 	private static void multiplyVirus() {
 		int[][] tmpMap = new int[N][M];
+		int virus = 0;
 		// 배열 복사
 		for (int r=0; r<N; r++) {
 			for (int c=0; c<M; c++) {
@@ -86,7 +76,6 @@ public class Main {
 		for (int r = 0; r < N; r++) {
 			for (int c = 0; c < M; c++) {
 				if (tmpMap[r][c] == 2 && !visited[r][c]) {
-//					BFS(r, c, setmap);
 					Queue<int[]> q = new LinkedList<>();
 					
 					visited[r][c] = true;
@@ -101,39 +90,19 @@ public class Main {
 							if (tmpMap[nr][nc] != 0) continue;
 							
 							tmpMap[nr][nc] = 2;
+							virus += 1;
 							q.add(new int[] {nr, nc});
 							visited[nr][nc] = true;
+							
+							// 증식 바이러스 수가 기존 최소값보다 작으면 더 탐색할 필요 없으므로 중지
+							if (virus >= addedVirus) {
+								return;
+							}
 						}
 					}
 				}
 			}
 		}
-//		for (int r=0; r<N; r++) {
-//			System.out.println(Arrays.toString(setmap[r]));
-//		}
-//		System.out.println();
-		// 안전영역 세기
-		countSafeZone(tmpMap);
+		addedVirus = virus;
 	}
-//	// 주변이 0인 구역만 큐에 담아 바이러스 증식
-//	static void BFS(int r, int c) {
-//		Queue<int[]> q = new LinkedList<>();
-//		
-//		visited[r][c] = true;
-//		q.add(new int[] {r, c});
-//		while(!q.isEmpty()) {
-//			int[] curr = q.poll();
-//			for (int dir = 0; dir<4; dir++) {
-//				int nr = curr[0] + dr[dir];
-//				int nc = curr[1] + dc[dir];
-//				
-//				if (nr<0 || nr>=N || nc<0 || nc>=M || visited[nr][nc]) continue;
-//				if (map[nr][nc] != 0) continue;
-//				
-//				map[nr][nc] = 2;
-//				q.add(new int[] {nr, nc});
-//				visited[nr][nc] = true;
-//			}
-//		}
-//	}
 }
