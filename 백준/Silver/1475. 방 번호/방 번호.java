@@ -21,14 +21,16 @@ public class Main {
 		}
 		
 		// 6과 9 횟수 평탄화
-		int add = count[6]+count[9];
-		if (add%2==0) {
-			count[6] = add/2;
-			count[9] = count[6];
-		} else {
-			count[6] = add/2;
-			count[9] = count[6]+1;
-		}
+//		int add = count[6]+count[9];
+//		if (add%2==0) {
+//			count[6] = add/2;
+//			count[9] = count[6];
+//		} else {
+//			count[6] = add/2;
+//			count[9] = count[6]+1;
+//		}
+		
+		count[6] = count[9] = (count[6] + count[9] + 1) /2;
 		
 		// 최대값 찾기
 		int max = -1;
