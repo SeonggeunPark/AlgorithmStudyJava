@@ -20,13 +20,14 @@ public class Main {
 			long y = Integer.parseInt(st.nextToken());
 			long dist = y-x;
 
-			long n=(int) Math.sqrt(dist)-1;
+			long n=(int) Math.sqrt(dist);
 			for (;; n++) {
 				long tmp = n*(n+1);
-				if (tmp > dist) {
+				if (tmp >= dist) {
+					if (tmp==dist) {
+						break;
+					}
 					n-=1;
-					break;
-				} else if (tmp == dist) {
 					break;
 				}
 			}
