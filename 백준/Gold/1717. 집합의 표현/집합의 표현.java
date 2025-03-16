@@ -1,81 +1,67 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.SortedSet;
+import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class Main {
-	static class Set {
-		int signal;
-		int a;
-		int b;
-
-		public Set(int signal, int a, int b) {
-			super();
-			this.signal = signal;
-			this.a = a;
-			this.b = b;
-		}
-
-		@Override
-		public String toString() {
-			return "Set [signal=" + signal + ", a=" + a + ", b=" + b + "]";
-		}
-
-	}
-
-	static int n, m;
 	static int[] p;
-
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
-
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-
-		Set[] set = new Set[m];
-
-		for (int i = 0; i < m; i++) {
-			st = new StringTokenizer(br.readLine());
-			int sig = Integer.parseInt(st.nextToken());
-			int a = Integer.parseInt(st.nextToken());
-			int b = Integer.parseInt(st.nextToken());
-
-			set[i] = new Set(sig, a, b);
-		}
-		p = new int[n + 1];
-		for (int i = 1; i <= n; i++) {
-			p[i] = i;
-		}
 		
-		for (int i = 0; i < m; i++) {
-			
-			int psig = set[i].signal;
-			int px = findSet(set[i].a);
-			int py = findSet(set[i].b);
-			
-			if (psig == 0) {
-				union(px,py);
-				
-			}else if(psig == 1) {
-				if (px == py) {
+		int n = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		// 본인이 속한 집합의 최상위 노드를 가리키는 배열
+		p = new int[n+1];
+		for (int i=0; i<=n; i++) {
+			p[i]=i;
+		} // 맨 처음엔 각 노드 자신이 최상위노드
+		
+		for (int i=0; i<m; i++) {
+			st = new StringTokenizer(br.readLine());
+			int op = Integer.parseInt(st.nextToken());
+			if (op == 0) {
+				union(Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()));
+			} else {
+				if (isUnion(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()))) {
 					System.out.println("YES");
-				}else {
-					System.out.println("NO");
+					continue;
 				}
+				System.out.println("NO");
 			}
 		}
 	}
-	
-	static int findSet(int x) {
-		if (x!= p[x]) {
-			p[x] = findSet(p[x]);
+	private static boolean isUnion(int a, int b) {
+		return find(a) == find(b);
+	}
+	private static void union(int a, int b) {
+		p[find(a)] = find(b);
+	}
+	private static int find(int a) {
+		if (p[a] == a) {
+			return a;
 		}
-		return p[x];
+		// 최상위 부모를 찾은 후 최상위 부모를 자신의 부모로 갱신
+		int parent = find(p[a]);
+		p[a] = parent;
+		return parent;
 	}
-	
-	static void union(int x, int y) {
-		p[y] = x;
-	}
-	
 }
