@@ -26,6 +26,7 @@ public class Main {
 	public static void main(String[] args) throws Exception, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringBuilder sb = new StringBuilder();
 		
 		int n = Integer.parseInt(st.nextToken());
 		int m = Integer.parseInt(st.nextToken());
@@ -42,12 +43,14 @@ public class Main {
 				union(Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()));
 			} else {
 				if (isUnion(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()))) {
-					System.out.println("YES");
+					sb.append("YES\n");
 					continue;
 				}
-				System.out.println("NO");
+				sb.append("NO\n");
 			}
 		}
+		
+		System.out.println(sb);
 	}
 	private static boolean isUnion(int a, int b) {
 		return find(a) == find(b);
