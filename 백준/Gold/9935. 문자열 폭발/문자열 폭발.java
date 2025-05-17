@@ -1,55 +1,53 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
-import java.util.StringTokenizer;
-public class Main {
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		char[] origin = br.readLine().toCharArray();
-		char[] pattern = br.readLine().toCharArray();
-		Stack<Character> st = new Stack<>();
-		Stack<Integer> record   = new Stack<>();  // ⬅️ pIdx 기록용 스택
-		
-		int pIdx = 0;
-		
-		for (int i=0; i<origin.length; i++) {
-            char c = origin[i];
-            st.push(c);
+import java.util.ArrayDeque;
+import java.util.Deque;
 
-            // 1) pIdx 갱신
-            if (c == pattern[pIdx]) {
-                pIdx++;
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader  br       = new BufferedReader(new InputStreamReader(System.in));
+        char[]          text     = br.readLine().toCharArray();
+        char[]          bomb     = br.readLine().toCharArray();
+        int             bombLen  = bomb.length;
+
+        Deque<Character> result      = new ArrayDeque<>();
+        Deque<Integer>   matchLens   = new ArrayDeque<>();
+        int              matchLen    = 0;
+
+        for (char c : text) {
+            result.addLast(c);
+
+            // 1) 현재 문자로부터 이어붙인 뒤의 일치 길이 계산
+            if (c == bomb[matchLen]) {
+                matchLen++;
             } else {
-                // 새로운 문자로부터 부분 매칭 시작 여부만 보고
-                pIdx = (c == pattern[0]) ? 1 : 0;
+                // 불일치라면, 이 문자가 bomb[0]인지만 보고 1 또는 0으로 재설정
+                matchLen = (c == bomb[0]) ? 1 : 0;
             }
-            
-            // 2) record에도 현재 pIdx를 push
-            record.push(pIdx);
-            
-            // 3) pIdx가 폭발문자열 길이와 같아지면 폭발
-            if (pIdx == pattern.length) {
-                // 스택과 record에서 패턴 길이만큼 pop
-                for (int k = 0; k < pattern.length; k++) {
-                    st.pop();
-                    record.pop();
+            matchLens.addLast(matchLen);
+
+            // 2) 폭발이 일어날 만큼 매칭됐으면
+            if (matchLen == bombLen) {
+                // bombLen 개 만큼 뒤에서 제거
+                for (int i = 0; i < bombLen; i++) {
+                    result.removeLast();
+                    matchLens.removeLast();
                 }
-                // 남은 스택 최상단의 pIdx로 복원
-                pIdx = record.isEmpty() ? 0 : record.peek();
+                // 남은 마지막 matchLen 으로 복원
+                matchLen = matchLens.isEmpty() ? 0 : matchLens.peekLast();
             }
-		}
-		
-		if (st.isEmpty()) {
-			System.out.println("FRULA");
-		} else {
-            StringBuilder sb = new StringBuilder();
-            for (char ch : st) sb.append(ch);
+        }
+
+        // 3) 결과 출력
+        if (result.isEmpty()) {
+            System.out.println("FRULA");
+        } else {
+            StringBuilder sb = new StringBuilder(result.size());
+            for (char c : result) {
+                sb.append(c);
+            }
             System.out.println(sb);
-		}
-	}
+        }
+    }
 }
