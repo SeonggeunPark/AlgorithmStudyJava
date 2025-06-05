@@ -5,13 +5,14 @@
 ---
 
 ## 📂 폴더 구조
-📦 AlgorithmStudyJava
-┣ 📂 SWEA # 삼성 SW Expert Academy 문제 풀이
-┣ 📂 백준 # 백준 문제 풀이
-┃ ┣ 📂 Bronze # 난이도별 분류 - 브론즈
-┃ ┣ 📂 Silver # 난이도별 분류 - 실버
-┃ ┗ 📂 Gold # 난이도별 분류 - 골드
-┗ 📄 README.md
+📦 AlgorithmStudyJava  
+├── 📁 SWEA &nbsp;# 삼성 SW Expert Academy 문제 풀이  
+├── 📁 백준 &nbsp;# 백준 문제 풀이  
+│   ├── 📁 Bronze &nbsp;# 난이도별 분류 – 브론즈  
+│   ├── 📁 Silver &nbsp;# 난이도별 분류 – 실버  
+│   └── 📁 Gold &nbsp;&nbsp;&nbsp;# 난이도별 분류 – 골드  
+└── 📄 README.md
+
 
 
 ---
