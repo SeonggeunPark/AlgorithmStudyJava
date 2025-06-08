@@ -33,7 +33,8 @@ public class Main {
 			max = Math.max(max, sum);
 		}
 		
-		System.out.println(maxPrice+" "+max);
+		sb.append(maxPrice).append(' ').append(max);
+		System.out.println(sb);
 	}
 	
 	static void init() throws IOException {
