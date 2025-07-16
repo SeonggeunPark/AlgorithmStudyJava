@@ -8,8 +8,6 @@ import java.util.StringTokenizer;
 
 /**
  * 백준 2580 : 스도쿠 [GOLD 4]
- * 1. 0,0부터 8,8까지 탐색 - 0인 경우에 체크 시작
- * 2. 해당 칸
  */
 public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -71,7 +69,6 @@ public class Main {
 		int c = b.c;
 		for (int num : b.pos ) {
 			if (!check[r][num] && !check[9+c][num] && !check[18+(r/3)*3+c/3][num] && !isDone) {
-//			if (check[r][num] <= 0 && check[9+c][num] <= 0 && check[18+(r/3)*3+c/3][num] <= 0 && !isDone) {
 				// 모두 체크 후 재귀함수 진입
 				check[r][num] = true;
 				check[9+c][num] = true;
@@ -125,14 +122,8 @@ public class Main {
 				check[r][n] = true;
 				check[9+c][n] = true;
 				check[18+(r/3)*3+c/3][n] = true;
-//				check[r][n] = c;
-//				check[9+c][n] = r;
-//				check[18+(r/3)*3+c/3][n] = (r%3)*3+(c%3);
 			}
 		}
 		
-//		for (int r=0; r<27; r++) {
-//			System.out.println(Arrays.toString(check[r]));
-//		}
 	}
 }
