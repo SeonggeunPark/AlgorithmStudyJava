@@ -21,11 +21,11 @@ public class Main {
 			if (tmpGcd == 1) break;
 		}
 		
-		for (int n : dists) {
-			ans += n/tmpGcd - 1;
-		}
+//		for (int n : dists) {
+//			ans += n/tmpGcd - 1;
+//		}
 		
-		System.out.println(ans);
+		System.out.println((trees[N-1]-trees[0])/tmpGcd - N+1);
 	}
 	private static int gcd(int i, int j) {
 		
