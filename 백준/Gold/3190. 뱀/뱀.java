@@ -9,7 +9,7 @@ public class Main {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringBuilder sb = new StringBuilder();
 	static int N, K, L;
-	static int[][] apples;
+	static int[][] board;
 	static String[][] turns;
 	static ArrayList<int[]> snake;
 	static int[] dr = { -1, 0, 1, 0 };
@@ -21,37 +21,35 @@ public class Main {
 		int tIdx = 0; // 방향전환 배열 추적 인덱스
 		int time = 1; // 시간 흐름
 		int dir = 1; // 시작은 오른쪽 방향
-		out: while (true) {
-
-			int nr = snake.get(snake.size() - 1)[0] + dr[dir];
-			int nc = snake.get(snake.size() - 1)[1] + dc[dir];
+		while (true) {
+			int r = snake.get(snake.size() - 1)[0];
+			int c = snake.get(snake.size() - 1)[1];
+			int nr = r + dr[dir];
+			int nc = c + dc[dir];
 
 			// 벽 체크
 			if (nr < 1 || nr > N || nc < 1 || nc > N)
-				break out;
+				break ;
 			// 몸통 충돌 체크
-			for (int[] pos : snake) {
-				if (pos[0] == nr && pos[1] == nc)
-					break out;
-			}
+			if (board[nr][nc] == 1) break;
 
 			// 사과 있는지 체크
 			boolean hadApple = false;
-			for (int[] apple : apples) {
-				if (apple[2] == 1 && apple[0] == nr && apple[1] == nc) {
-					apple[2] = 0;
-					hadApple = true;
-					break;
-				}
+			if (board[nr][nc] == 2) {
+				hadApple = true;
+				board[nr][nc] = 0;
 			}
 
 			// 사과 안먹었으면 꼬리 제거
-			if (!hadApple)
+			if (!hadApple) {
+				board[snake.get(0)[0]][snake.get(0)[1]] = 0;
 				snake.remove(0);
-
+			}
 
 			// 이동
 			snake.add(new int[] { nr, nc });
+			board[nr][nc] = 1;
+			
 
 			// 방향전환 타이밍인지 체크
 			if (tIdx < turns.length && time == Integer.parseInt(turns[tIdx][0])) {
@@ -72,16 +70,15 @@ public class Main {
 
 	private static void init() throws IOException {
 		N = Integer.parseInt(br.readLine());
+		board = new int[N+1][N+1];
+		board[1][1] = 1;
 		// 맨 마지막 인덱스가 뱀의 머리
 		snake = new ArrayList<>(Arrays.asList(new int[] { 1, 1 }));
 
 		K = Integer.parseInt(br.readLine());
-		apples = new int[K][3];
 		for (int i = 0; i < K; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			apples[i][0] = Integer.parseInt(st.nextToken());
-			apples[i][1] = Integer.parseInt(st.nextToken());
-			apples[i][2] = 1; // 사과 존재 여부 체크
+			board[Integer.parseInt(st.nextToken())][Integer.parseInt(st.nextToken())] = 2;
 		}
 
 		L = Integer.parseInt(br.readLine());
