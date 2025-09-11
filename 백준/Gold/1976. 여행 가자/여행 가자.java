@@ -1,73 +1,58 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
-
 public class Main {
-	
-	static int n,m;
-	static int[][] city;
-	static int[] p;
-	
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+	public static void main(String args[]) throws Exception {
+		Scanner sc = new Scanner(System.in);
 		
-		// 도시의 수
-		n = Integer.parseInt(br.readLine());
-		// 여행 계획에 속한 도시들의 수
-		m = Integer.parseInt(br.readLine());
-		
-		city = new int[n+1][n+1];
-		for (int i = 1; i < n+1; i++) {
-			st = new StringTokenizer(br.readLine());
-			for (int j = 1; j < n+1; j++) {
-				city[i][j] = Integer.parseInt(st.nextToken());
-			}
-		}
-		p = new int[n+1];
-		for (int i = 1; i <=n; i++) {
+		int N = sc.nextInt();	// 도시 수
+		int M = sc.nextInt();	// 계획 포함 도시 수
+		// union-find 전략
+		int[] p = new int[N+1];
+		for (int i=1; i<=N; i++) {
 			p[i] = i;
 		}
-		
-		
-		for (int i = 1; i <= n; i++) {
-			for (int j = 1; j <= n; j++) {
-				int px = findSet(i);
-				int py = findSet(j);
-				if (city[i][j] == 1 && px != py) {
-					union(px,py);
-				}
+		// 연결된 길끼리 union
+		int[][] adjArr = new int[N+1][N+1];
+		for (int s=1; s<=N; s++) {
+			for (int e=1; e<=N; e++) {
+				adjArr[s][e] = sc.nextInt();
+				
+				if (adjArr[s][e] == 0) continue;
+				union(s, e, p);
 			}
 		}
-		int[] plan = new int[m+1];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 1; i < plan.length; i++) {
-			plan[i] = Integer.parseInt(st.nextToken());
+		int[] route = new int[M];
+		for (int i=0; i<M; i++) {
+			route[i] = sc.nextInt();
 		}
 		
-		int cnt = 0;
-		for (int i = 1; i < plan.length; i++) {
-			if (p[plan[1]]== p[plan[i]] ) {
-				cnt++;
+		boolean isValid = true;
+		for (int i=1; i<route.length; i++) {
+			int s = route[i-1];
+			int e = route[i];
+			
+			if (find(s, p) != find(e, p)) {
+				isValid = false;
+				break;
 			}
 		}
+		
+		System.out.println(isValid ? "YES" : "NO");
+	}
 
-		if (cnt == m) {
-			System.out.println("YES");
-		}else System.out.println("NO");
+	private static void union(int x, int y, int[] p) {
+		int px = find(x, p);
+		int py = find(y, p);
+		if (px == py) return;
 		
+		p[px] = py;
 	}
-	
-	static int findSet(int x) {
-		if (x != p[x]) {
-			p[x]= findSet(p[x]);
-		}
-		return p[x];
-	}
-	
-	static void union(int x,int y) {
-		p[y] = x;
+
+	private static int find(int x, int[] p) {
+		if (p[x] == x) return x;
+		return p[x] = find(p[x], p);
 	}
 }
