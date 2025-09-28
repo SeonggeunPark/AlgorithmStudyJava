@@ -16,7 +16,7 @@ public class Main {
 		r = new int[N];
 		for (int i=0; i<N; i++) {
 			p[i]=i;
-			r[i]=1;
+			r[i]=0;
 		}
 		int[][] inputs = new int[M][2];
 		for (int i = 0; i < M; i++) {
@@ -50,17 +50,17 @@ public class Main {
 		int py = find(y);
 		if (r[px] > r[py]) {
 			p[py] = px;
+			r[px]+=1;
 		} else {
 			p[px] = py;
+			r[py]+=1;
 		}
 	}
 
 	private static int find(int x) {
 		if (p[x]==x) return x;
 		int px = find(p[x]);
-		r[p[x]]-=1;
 		p[x] = px;
-		r[px]+=1;
 		return px;
 	}
 }
