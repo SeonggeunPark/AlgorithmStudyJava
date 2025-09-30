@@ -1,18 +1,6 @@
 import java.io.*;
 import java.util.*;
 
-/*
- *  N : 최대 20
- *  모든 경우의 수 => 4방향 , 5회 = 4^5 = 1,024
- *  브루트포스 가능
- *  
- *  1. dfs로 모든 경우 탐색
- *  2. 시뮬레이션
- *  		-좌: 0행부터, 0열부터
- *  		-우: 0행부터, 3열부터
- *  		-상: 0열부터, 0행부터
- *  		-하: 0열부터, 3행부터
- */
 public class Main {
 	static final long INF = Long.MAX_VALUE;
 	static int N;
@@ -37,7 +25,6 @@ public class Main {
 			if (min == 0) break;
 		}
 		
-		Arrays.sort(res);
 		System.out.println(res[0]+" "+res[1]+" "+res[2]);
 	}
 	// i번째 값을 고정픽한 후 남은 2개 고르기
