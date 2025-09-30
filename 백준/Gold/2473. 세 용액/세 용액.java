@@ -44,17 +44,9 @@ public class Main {
 	private static void search(int stdIdx) {
 		long stdVal = arr[stdIdx]*-1; // 해당 값에 가장 가까운 값을 찾아야함
 		
-		int l = 0;
+		int l = stdIdx+1;
 		int r = N-1;
 		while (l<r) {
-			if (l==stdIdx) {
-				l++;
-				continue;
-			}
-			if (r==stdIdx) {
-				r--;
-				continue;
-			}
 			long sum = arr[l]+arr[r];
 			long diff = sum-stdVal;
 			if (min > Math.abs(diff)) {
