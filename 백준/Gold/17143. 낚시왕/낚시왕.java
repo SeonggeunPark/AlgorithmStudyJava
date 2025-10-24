@@ -43,6 +43,12 @@ public class Main {
 			int s = Integer.parseInt(st.nextToken()); // 속도
 			int d = Integer.parseInt(st.nextToken()); // 방향
 			int z = Integer.parseInt(st.nextToken()); // 크기
+			
+			if (d==1 || d==2) {
+				s %= 2*(R-1);
+			} else {
+				s %= 2*(C-1);
+			}
 
 			sharks[i] = new Shark(r, c, s, d, z);
 			map[r][c] = i;
