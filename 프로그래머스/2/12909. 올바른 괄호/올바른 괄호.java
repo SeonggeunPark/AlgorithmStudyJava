@@ -3,21 +3,23 @@ import java.util.*;
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
-        Stack<Character> st = new Stack<>();
+        
+        int sCnt = 0;
         
         for (int i=0; i<s.length(); i++) {
             char c = s.charAt(i);
+            
             if (c=='(') {
-                st.push(c);
+                sCnt+=1;
             } else {
-                if (st.size()<=0 || st.peek()!='(') {
+                if (sCnt <= 0) {
                     answer = false;
                     break;
                 }
-                st.pop();
+                sCnt-=1;
             }
         }
-        if (!st.isEmpty()) answer = false;
+        if (sCnt!=0) answer = false;
         return answer;
     }
 }
