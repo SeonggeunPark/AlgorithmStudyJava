@@ -1,7 +1,5 @@
 import java.util.*;
-/*
-union-find
-*/
+
 class Solution {
     public long[] solution(long k, long[] room_number) {
         int size = room_number.length;
@@ -18,11 +16,11 @@ class Solution {
         return answer;
     }
     public long find(long x, Map<Long, Long> p) {
-        if (p.get(x)== null || p.get(x)==x) {
-            p.put(x, x);
+        if (p.get(x)== null) {
             return x;
         }
-        p.put(x, find(p.get(x), p));
-        return p.get(x);
+        long parent = find(p.get(x), p);
+        p.put(x, parent);
+        return parent;
     }
 }
