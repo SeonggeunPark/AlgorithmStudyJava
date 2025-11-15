@@ -29,45 +29,23 @@ class Solution {
             adjList[d].add(new Node(c,f));
         }
         
-        int[] dist = new int[n+1];
+        int[] distS = new int[n+1];
+        int[] distA = new int[n+1];
+        int[] distB = new int[n+1];
+        
         // 다익스트라로 각 정점까지의 최단거리 산정
-        dijkstra(s, dist, adjList);
-        // 합승으로 도달가능한 정점에서 A, B까지 각각 최단거리
-        int[][] fwDist = new int[n+1][n+1];
-        for (int i=1; i<=n; i++) {
-            Arrays.fill(fwDist[i],Integer.MAX_VALUE);
-        }
-        for (int[] fare : fares) {
-            int c = fare[0];
-            int d = fare[1];
-            int f = fare[2];
-            fwDist[c][d] = f;
-            fwDist[d][c] = f;
-        }
-        // k를 거치고 가는 최단거리
-        for (int k=1; k<=n; k++) {
-            for (int i=1; i<=n; i++) {
-                if (k==i) continue;
-                for (int j=1; j<=n; j++) {
-                    if (i==j) {
-                        fwDist[i][j] = 0;
-                        fwDist[j][i] = 0;
-                        continue;
-                    }
-                    if (fwDist[i][k] != Integer.MAX_VALUE && fwDist[k][j] != Integer.MAX_VALUE)
-                    fwDist[i][j] = Math.min(fwDist[i][k]+fwDist[k][j], fwDist[i][j]);
-                }
-            }
-        }
+        dijkstra(s, distS, adjList);
+        dijkstra(a, distA, adjList);
+        dijkstra(b, distB, adjList);
+   
         int answer = Integer.MAX_VALUE;
-        // 합승종료지점부터 거리 완전탐색
-        for (int start=1; start<=n; start++) {
-            if (fwDist[start][a] == Integer.MAX_VALUE 
-                || fwDist[start][b] == Integer.MAX_VALUE
-                || fwDist[s][start] == Integer.MAX_VALUE) continue;
-            int cur = fwDist[s][start] + fwDist[start][b] + fwDist[start][a];
-            answer = Math.min(answer, cur);
+        for (int i=1; i<=n; i++) {
+            if (distS[i]==Integer.MAX_VALUE ||
+               distA[i]==Integer.MAX_VALUE ||
+               distB[i]==Integer.MAX_VALUE) continue; 
+            answer = Math.min(answer, distS[i]+distA[i]+distB[i]);
         }
+        
         
         return answer;
     }
