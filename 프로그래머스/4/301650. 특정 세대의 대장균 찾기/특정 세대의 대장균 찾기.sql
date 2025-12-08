@@ -1,0 +1,8 @@
+SELECT p3.ID
+FROM ECOLI_DATA p3
+JOIN (SELECT p2.ID
+        FROM ECOLI_DATA p2
+        JOIN ECOLI_DATA p1 ON p2.PARENT_ID = p1.ID 
+                            AND p1.PARENT_ID IS NULL) p2 
+        ON p2.ID = p3.PARENT_ID
+ORDER BY p3.ID;
