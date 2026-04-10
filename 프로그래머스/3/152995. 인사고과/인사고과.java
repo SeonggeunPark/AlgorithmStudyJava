@@ -9,29 +9,18 @@ class Solution {
            @Override
             public int compare(int[] o1, int[] o2) {
                 if (o2[0]==o1[0]) {
-                    return o2[1]-o1[1];
+                    return o1[1]-o2[1];
                 }
                 return o2[0] - o1[0];
             }
         });
         
         int max = 0;
-        int prev = -1;
-        int tmpMax = 0;
-        out:
-        for(int i=0; i<scores.length; i++) {
-            
-            if (scores[i][0]>a && scores[i][1] > b) return -1;
-            // 유효 체크
-            if (prev != scores[i][0]) {
-                max = Math.max(max, tmpMax);
-                tmpMax = 0;
-            }
-            prev = scores[i][0];   
-            
-            if (scores[i][1] < max) continue;
-            tmpMax = Math.max(tmpMax, scores[i][1]);
-            if (scores[i][0]+scores[i][1] > a+b) answer+=1;
+        for (int[] score: scores) {
+            if (a<score[0] && b<score[1]) return -1;
+            if (score[1]<max) continue;
+            if (score[0]+score[1] > a+b) answer+=1;
+            max = Math.max(max,score[1]);
         }
         return answer;
     }
