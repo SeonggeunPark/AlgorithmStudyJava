@@ -1,62 +1,78 @@
 import java.util.*;
 
 class Solution {
-    private class Song implements Comparable<Song> {
-        int num;
-        int play;
-        
-        Song(int num, int play){
-				this.num = num;
-				this.play = play;
+    public class Genre {
+        List<Song> songs;
+        int played;
+        public Genre(int played) {
+            songs = new ArrayList<>();
+            this.played = played;
         }
-        
-        @Override
-        public int compareTo(Song o) {
-            if (this.play == o.play) {
-                return this.num-o.num;
-            }
-            return o.play-this.play;
+    }
+    public class Song {
+        int num;
+        int played;
+        public Song(int num, int played) {
+            this.num = num;
+            this.played = played;
         }
     }
     public int[] solution(String[] genres, int[] plays) {
-        /*
-        Song객체 만들어 재생수 내림차순 정렬? 10000log10000 = 100만
-        Map으로 장르 : 노래번호
-        */
-        Map<String, Integer> genreSum = new HashMap<>();
-        Map<String, List<Song>> genreSongs = new HashMap<>();
-        
-        for (int i=0; i<genres.length; i++) {
-            Song s = new Song(i, plays[i]);
-            genreSum.put(genres[i], genreSum.getOrDefault(genres[i], 0)+plays[i]);
-            if (genreSongs.get(genres[i])==null) {
-                genreSongs.put(genres[i], new ArrayList<>());
-                genreSongs.get(genres[i]).add(s);
+        int len = genres.length;
+        Map<String, Genre> genreMap = new HashMap<>();
+        for (int i=0; i<len; i++) {
+            String gen = genres[i];
+            int play = plays[i];
+            if (genreMap.get(gen) == null) {
+                Genre genre = new Genre(play);
+                genre.songs.add(new Song(i, play));
+                genreMap.put(gen, genre);
             } else {
-                genreSongs.get(genres[i]).add(s);
+                Genre genre = genreMap.get(gen);
+                genre.played += play;
+                genre.songs.add(new Song(i, play));
             }
         }
         
-        List<String> order = new ArrayList<>(genreSum.keySet());
-        Collections.sort(order, (a, b) ->
-            genreSum.get(b) - genreSum.get(a)
-        );
-        
-        List<Integer> ans = new ArrayList<>();
-        for (String genre : order) {
-            Collections.sort(genreSongs.get(genre));
-            for (int i=0; i<2; i++) {
-                if (genreSongs.get(genre).size() > i) {
-                    ans.add(genreSongs.get(genre).get(i).num);
+        Genre[] gens = new Genre[genreMap.keySet().size()];
+        int idx = 0;
+        for (String key : genreMap.keySet()) {
+            gens[idx++] = genreMap.get(key);
+        }
+        Arrays.sort(gens, new Comparator<Genre>(){
+           @Override
+            public int compare(Genre o1, Genre o2) {
+                return o2.played - o1.played;
+            }
+        });
+        List<Integer> result = new ArrayList<>();
+        for (Genre gen : gens) {
+            if (gen.songs.size()<2) {
+                result.add(gen.songs.get(0).num);
+            } else {
+                int max1 = 0;
+                int max2 = 0;
+                int num1 = 0;
+                int num2 = 0;
+                for (Song song : gen.songs) {
+                    if (song.played > max1) {
+                        max2 = max1;
+                        num2 = num1;
+                        max1 = song.played;
+                        num1 = song.num;
+                    } else if (song.played > max2) {
+                        max2 = song.played;
+                        num2 = song.num;
+                    }
                 }
+                result.add(num1);
+                result.add(num2);
             }
         }
-        
-        int[] answer = new int[ans.size()];
-        for (int i=0; i<answer.length; i++) {
-            answer[i] = ans.get(i);
+        int[] answer = new int[result.size()];
+        for (int i=0; i<result.size(); i++) {
+            answer[i] = result.get(i);
         }
-        
         return answer;
     }
 }
