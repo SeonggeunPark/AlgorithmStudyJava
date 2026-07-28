@@ -1,72 +1,50 @@
 import java.util.*;
 
 class Solution {
-    class Edge implements Comparable<Edge>{
-        int s;
-        int e;
-        int w;
-        
-        Edge (int s, int e, int w) {
-            this.s = s;
-            this.e = e;
-            this.w = w;
+    public class Edge implements Comparable<Edge> {
+        int s, e, w;
+        public Edge(int s, int e, int w) {
+            this.s=s;
+            this.e=e;
+            this.w=w;
         }
-        
         @Override
-        public int compareTo (Edge o) {
-            return this.w - o.w;
-        }
-        
-        @Override
-        public String toString() {
-            return this.s +", "+this.e+", "+this.w;
+        public int compareTo(Edge o) {
+            return this.w-o.w;
         }
     }
-    static int[] p;
     public int solution(int n, int[][] costs) {
-        // 간선을 객체화하여 배열 저장
-        Edge[] edges = new Edge[costs.length];
-        for (int i=0; i<costs.length; i++) {
-            edges[i] = new Edge(costs[i][0], costs[i][1], costs[i][2]);
+        int len = costs.length;
+        Edge[] edges = new Edge[len];
+        int idx=0;
+        for (int[] cost:costs) {
+            edges[idx++] = new Edge(cost[0], cost[1], cost[2]);
         }
-        
-        // 가중치 기준 오름차순 정렬
         Arrays.sort(edges);
-   
         
-        // 트리를 이용한 union-find
-        // 노드별 최상위 노드 기록 배열
-        p = new int[n+1];
-        for (int i=1; i<=n; i++) {
-            p[i] = i;
+        int[] p = new int[len+1];
+        for (int i=0; i<n; i++) {
+            p[i]=i;
         }
         
-        // kruskal 알고리즘
-        int cnt = 0;
-        int ans = 0;
-        for (int i=0; i<edges.length; i++) {
-            Edge curr = edges[i];
-            int px = find(curr.s);
-            int py = find(curr.e);
-            
-            if (px == py) continue;
-            
-            union(curr.s, curr.e);
-            cnt += 1;
-            ans += curr.w;
-            
-            if (cnt >= n-1) break;
+        int pick = 0;
+        int cost = 0;
+        for (Edge edge:edges) {
+            if (find(edge.s, p) != find(edge.e, p)) {
+                union(edge.s, edge.e, p);
+                pick+=1;
+                cost+=edge.w;
+            }
+            if (pick > n) break;
         }
         
-        return ans;
+        return cost;
     }
-    void union(int x, int y) {
-        p[find(x)] = find(y);
+    public int find(int x, int[] p) {
+        if (p[x]==x) return x;
+        return p[x] = find(p[x], p);
     }
-    int find(int x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]);
-        }
-        return p[x];
+    public void union(int x, int y, int[] p) {
+        p[find(x, p)] = find(y, p);
     }
 }
